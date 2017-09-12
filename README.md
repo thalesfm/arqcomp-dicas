@@ -72,7 +72,15 @@ ENDWHILE:
 END WHILE
 ```
 
-## Dica \#4: Soma e subtração em 16 bits
+## Dica \#4: Use o debugger
+
+Além de simular o funcionamento da arquitetura Sapiens, o ambiente SimuS também acompanha um debugger. Através dele, é possível alterar valores em memória durante a execução do programa, assim como interromper sua execução. Além disso, o programa também pode ser executado passo a passo, uma instrução por vez. Outra funcionalidade extremamente útil é a janela de variáveis, através da qual pode-se acompanhar ao longo da execução do programa os valores presentes nas labels definidas pelo programador. Juntas, estas ferramentas tornam bem mais prático o trabalho de depurar o funcionamento de programas e corrigir erros.
+
+![Janela de variáveis](/images/janela.png)
+
+A janela de variáveis, destacada acima, apresenta os valores de todos os endereços declarados a partir das diretivas `DB`, `DW`, `DS` e `STR`. Quando a declaração acompanha uma label, como em `X: DB 1, 2, 3`, esta também é exibida junto ao seu valor.
+
+## Dica \#5: Soma e subtração em 16 bits
 
 Quando se trabalha com arquiteturas de 8 bits, é essencial saber como lidar com números em larguras maiores como 16, 32 ou até 64 bits. Isso se torna ainda mais importante no caso do Sapiens, que embora seja limitado a aritmética em 8 bits, também faz uso extenso de dados em 16 bits para endereços de memória. Como a ALU da arquitetura é limitada a cálculos com 8 bits de largura, é necessário que haja uma separação dos cálculos com números grandes em múltiplas etapas de apenas um byte cada. No Sapiens, as instruções instruções `ADC` e `SBC`, que fazem uso da flag de carry, são a maneira mais prática de realizar essa separação. Através dessas instruções fica fácil encadear somas e subtrações com vários bytes, automaticamente levando em consideração os eventuais casos de "vai-um" e "vem-um" através da flag de carry. Desta forma, não é necessário o uso de desvios condicionais, o que torna o código mais conciso e fácil de entender. Exemplo:
 
@@ -85,7 +93,7 @@ Quando se trabalha com arquiteturas de 8 bits, é essencial saber como lidar com
     STA Z+1
 ```
 
-## Dica \#5: Endereços de memória e a pilha
+## Dica \#6: Endereços de memória e a pilha
 
 O uso correto da pilha é essencial para o funcionamento de uma sub-rotina. Por isso, é importante estabelecer um padrão que determine como os argumentos devem ser passados entre as subrotinas e quem faz a chamada. O padrão que eu uso para o meu código determina que os argumentos devem ser retirados da pilha na ordem normal pela subrotina. Você pode utilizar qualquer padrão em seu código, o mais importante é manter esse padrão de forma consistente. Exemplo:
 
@@ -126,7 +134,7 @@ FOO:
     STA VAL
 ```
 
-## Dica \#6: Usos alternativos para o apontador de pilha
+## Dica \#7: Usos alternativos para o apontador de pilha
 
 **Atenção: o uso dos atalhos abaixo irá corromper o valor atual do apontador de pilha. Por isso, é importante sempre salvar o valor original do apontador e restaurá-lo antes de voltar a usar a pilha normalmente, com instruções como `PUSH` e `RET`.**
 
